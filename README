@@ -1,0 +1,3 @@
+task-flask, as opposed to task-hask, which will probably happen eventually.
+
+a webapp that integrates with taskwarrior. currently: allows you to send text messages that cause tasks to be added to your taskwarrior queue!
