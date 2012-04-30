@@ -1,6 +1,7 @@
 from subprocess import call
 
 from flask import Flask, request
+from twilio import twiml
 from twilio.rest import TwilioRestClient
 
 import config
@@ -20,7 +21,7 @@ def hello():
     else:
         message('specify task')
 
-    return 'done'
+    return str(twiml.Response())
 
 
 if __name__ == "__main__":
