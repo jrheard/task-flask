@@ -12,16 +12,19 @@ client = TwilioRestClient(config.TWILIO_ACCOUNT, config.TWILIO_TOKEN)
 
 @app.route("/", methods=["POST"])
 def hello():
-    message = lambda msg: client.sms.messages.create(to=request.form.get('From'), from_=request.form.get('To'), body=msg)
+    def message(msg):
+        client.sms.messages.create(to=request.form.get('From'), from_=request.form.get('To'), body=msg)
+        return str(twiml.Response())
+
+    if request.form.get('From') != config.MY_PHONE_NUMBER or request.form.get('To') != config.MY_TWILIO_NUMBER:
+        return message('go away')
 
     task = request.form.get('Body')
-    if task:
-        code = call(['/usr/local/bin/task', 'add', task])
-        message('ok' if code == 0 else 'oh no!')
-    else:
-        message('specify task')
+    if not task:
+        return message('specify task')
 
-    return str(twiml.Response())
+    code = call(['/usr/local/bin/task', 'add', task])
+    return message('ok' if code == 0 else 'oh no!')
 
 
 if __name__ == "__main__":
